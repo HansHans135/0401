@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>><</title>
+    <meta property="og:image" content="/i.png" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffb3b3 100%);
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            transform: rotate(45deg);
+            animation: float 4s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart:before {
+            left: -10px;
+        }
+
+        .heart:after {
+            top: -10px;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(45deg) translateY(0px); }
+            50% { transform: rotate(45deg) translateY(-20px); }
+            100% { transform: rotate(45deg) translateY(0px); }
+        }
+
+        .question {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #ff4d4d;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ffc0cb);
+            color: white;
+        }
+
+        .no-btn {
+            background: linear-gradient(45deg, #ff8a8a, #ffd1d1);
+            color: white;
+        }
+
+        .result {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result img {
+            max-width: 90%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .result p {
+            font-size: 24px;
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="hearts-container"></div>
+    <div class="question">你願意和我交往嗎？</div>
+    
+    <div class="buttons">
+        <button class="yes-btn" onclick="">我願意</button>
+        <button class="no-btn" onclick="growYesButton()">不要</button>
+    </div>
+    
+    <div class="result" id="result">
+        <p>喔等等快看！這你欸！</p>
+        <img src="/image.png">
+    </div>
+    
+    <script>
+        // 添加漂浮愛心效果
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.opacity = Math.random() * 0.5 + 0.3;
+            document.getElementById('hearts-container').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+
+        let clickCount = 0;
+        const maxSize = 600;
+        
+        function growYesButton() {
+            clickCount++;
+            const yesBtn = document.querySelector('.yes-btn');
+            const currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
+            const newSize = Math.min(currentSize + 20, maxSize);
+            
+            yesBtn.style.fontSize = newSize + 'px';
+            yesBtn.style.padding = (10 + clickCount * 20) + 'px ' + (20 + clickCount * 20) + 'px';
+            
+            if (clickCount > 2) {
+                yesBtn.style.fontWeight = 'bold';
+                yesBtn.style.background = 'linear-gradient(45deg, #ff4d4d, #ff8080)';
+            }
+            
+            if (clickCount > 3) {
+                yesBtn.style.boxShadow = '0 0 ' + clickCount * 20 + 'px rgba(255,105,180,0.5)';
+            }
+            yesBtn.onclick = showResult;
+        }
+        
+        function showResult() {
+            document.querySelector('.buttons').style.display = 'none';
+            document.querySelector('.question').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
